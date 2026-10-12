@@ -20,6 +20,8 @@ Mxcord is a [Revenge](https://github.com/revenge-mod) plugin for Discord on Andr
 
 Revenge checks the URL for updates each time Discord starts.
 
+Something not working? See the [FAQ](docs/faq.md).
+
 ## Features
 
 - Matrix DMs appear in the DM list, sorted by activity, with message previews.
