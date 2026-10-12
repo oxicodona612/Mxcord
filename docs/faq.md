@@ -61,6 +61,12 @@ node tools/verify-device.mjs https://example.com
 
 The `Discord (Mxcord)` session has no encryption keys and always shows as unverified. That is expected; pantalaimon does the encryption for it.
 
+### Element warns "This message was sent by a device unverified by the owner"
+
+Messages you send from Discord are encrypted by pantalaimon's device. Until that device is signed with your cross-signing key, Element marks every one of them with this warning, for you and for the people you talk to.
+
+Run the verification script from the previous answer and choose the `pantalaimon` device. The warning disappears from new and existing messages once Element sees the signature; reload Element if it is still shown.
+
 ### pantalaimon logs errors with Conduit, conduwuit or continuwuity
 
 These servers send responses that pantalaimon's library rejects. Apply the patches in [Conduit, conduwuit and continuwuity](pantalaimon.md#conduit-conduwuit-and-continuwuity).
