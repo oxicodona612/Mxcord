@@ -1,0 +1,6 @@
+{
+  "name": "Mxcord",
+  "description": "Matrix direct messages inside Discord, with support for end-to-end encryption, avatars, message requests and notifications.",
+  "authors": [{ "name": "oxicodona612", "id": "0" }],
+  "icon": "ic_message"
+}

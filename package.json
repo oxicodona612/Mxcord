@@ -1,0 +1,15 @@
+{
+  "name": "mxcord",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Matrix direct messages inside Discord.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "logo": "node tools/gen-logo.mjs"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2"
+  }
+}
