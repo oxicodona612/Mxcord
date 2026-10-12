@@ -2,15 +2,19 @@
   "name": "mxcord",
   "version": "1.0.0",
   "private": true,
-  "description": "Matrix direct messages inside Discord.",
+  "description": "Matrix direct messages inside Discord, for Android (Revenge) and desktop (Vencord).",
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
+    "test": "node build.mjs && node test/mobile-harness.mjs",
+    "mock": "node test/mock-homeserver.mjs",
+    "install-vencord": "node tools/install-vencord.mjs",
     "logo": "node tools/gen-logo.mjs",
     "verify": "node tools/verify-device.mjs"
   },
   "devDependencies": {
-    "@resvg/resvg-js": "^2.6.2"
+    "@resvg/resvg-js": "^2.6.2",
+    "esbuild": "^0.25.12"
   }
 }

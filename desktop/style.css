@@ -1,0 +1,10 @@
+.vc-mxcord-badge {
+    margin-left: 4px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.vc-mxcord-settings .vc-mxcord-buttons {
+    display: flex;
+    gap: 8px;
+}

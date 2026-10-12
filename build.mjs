@@ -1,13 +1,31 @@
-// Builds the files served at the plugin URL: the plugin (index.js, manifest.json) and the homepage.
+// Builds the files served at the plugin URL: the Revenge plugin (index.js, manifest.json)
+// and the homepage. The desktop plugin is built by Vencord; see tools/install-vencord.mjs.
 import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
+import { fileURLToPath } from "node:url";
+import { build } from "esbuild";
 
 const root = new URL("./", import.meta.url);
 const meta = JSON.parse(await readFile(new URL("plugin.json", root), "utf8"));
-const js = await readFile(new URL("src/index.js", root), "utf8");
 
-// Revenge wraps the source in `return`, so a leading comment would make it return nothing.
-if (!/^\s*\(/.test(js)) throw new Error("src/index.js must start with the IIFE");
+const result = await build({
+    entryPoints: [fileURLToPath(new URL("mobile/index.js", root))],
+    bundle: true,
+    format: "iife",
+    globalName: "mxcord",
+    target: "es2020",
+    charset: "utf8",
+    legalComments: "none",
+    write: false,
+});
+
+// Revenge evaluates the file as `vendetta => { return <file> }`, so it must be a single
+// expression that evaluates to the plugin.
+const js = result.outputFiles[0].text
+    .replace(/^var mxcord = /, "")
+    .replace(/;\s*$/, "")
+    + ".default\n";
+if (!js.startsWith("(")) throw new Error("bundle must start with the IIFE");
 
 const manifest = {
     name: meta.name,

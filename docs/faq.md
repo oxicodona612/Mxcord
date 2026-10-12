@@ -18,13 +18,13 @@ The password is wrong, or the account exists on a different homeserver than the 
 
 The homeserver URL is correct but has no account with that name. Check the spelling, or check that the URL points at the server the account was registered on.
 
-### "Network request failed"
+### "Network request failed" or "fetch failed"
 
-Discord could not reach the URL. Check that:
+Discord could not reach the URL. Android reports "Network request failed", desktop reports "fetch failed". Check that:
 
-- the URL opens in the phone's browser (`<url>/_matrix/client/versions` should return JSON);
-- it uses `https://`, because stock Discord builds block plain `http://`;
-- a LAN address such as `http://192.168.1.2:8009` is only used while the phone is on the same network.
+- the URL opens in a browser on the same device (`<url>/_matrix/client/versions` should return JSON);
+- on Android, it uses `https://`, because stock Discord builds block plain `http://`;
+- a LAN address such as `http://192.168.1.2:8009` is only used while the device is on the same network.
 
 ### "Session expired. Log in again."
 
@@ -87,14 +87,32 @@ Mxcord only shows one-to-one direct messages. Group rooms and spaces are not sho
 
 ### "Add by Matrix" is missing from the Add Friends screen
 
-The entry replaces "Find Your Friends" and is found by its English label. With Discord set to another language, use **Add by Matrix** in the Mxcord settings instead.
+On Android, the entry replaces "Find Your Friends" and is found by its English label. With Discord set to another language, use **Add by Matrix** in the Mxcord settings instead. On desktop, it is in the Vencord toolbox (enable the VencordToolbox plugin) and in the Mxcord settings.
 
 ### Notifications don't arrive
 
 Notifications are only shown while Discord is running, in the foreground or background. If Android stops Discord in the background, no notifications arrive until it is opened again. Excluding Discord from battery optimization helps.
+
+On desktop, no notification is shown for the chat that is open while Discord has focus. Vencord's notification settings decide whether they appear inside Discord or as system notifications.
 
 ## Updates
 
 ### A new version doesn't show up
 
 Revenge checks the plugin URL for updates when Discord starts. Fully close Discord and open it again.
+
+On desktop, update both folders and rebuild, as described under [Desktop (Vencord)](../README.md#desktop-vencord), then restart Discord.
+
+## Desktop
+
+### Mxcord is not in Vencord's plugin list
+
+The official Vencord installer ships a prebuilt Vencord that cannot load third-party plugins. Follow the [desktop installation](../README.md#desktop-vencord) steps, which build Vencord from source with Mxcord included, and make sure `pnpm inject` patched the Discord installation you are using (Stable, PTB or Canary).
+
+### Mxcord disappeared after a Discord update
+
+Discord updates can replace the patched files. Run `pnpm inject` in the Vencord folder again.
+
+### The Matrix badges are missing
+
+The badges use Vencord's MessageDecorationsAPI and MemberListDecoratorsAPI plugins, which are turned on with Mxcord. They take effect after a restart, so restart Discord once after enabling Mxcord.

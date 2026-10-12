@@ -4,15 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mxcord</title>
-<meta name="description" content="Matrix direct messages inside Discord for Android. A Revenge plugin with end-to-end encryption, avatars, message requests and notifications.">
+<meta name="description" content="Matrix direct messages inside Discord, on Android (Revenge) and desktop (Vencord), with end-to-end encryption, avatars, message requests and notifications.">
 <meta property="og:title" content="Mxcord">
-<meta property="og:description" content="Matrix direct messages inside Discord for Android.">
+<meta property="og:description" content="Matrix direct messages inside Discord, on Android and desktop.">
 <meta name="theme-color" content="#12A39A">
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <style>
 :root {
     --accent: #12a39a;
     --accent-strong: #0e8a82;
+    --accent-soft: #e3f4f2;
     --bg: #f6f8f8;
     --surface: #ffffff;
     --border: #dfe5e5;
@@ -24,6 +25,7 @@
     :root {
         --accent: #2cc2b8;
         --accent-strong: #5fd6ce;
+        --accent-soft: #123331;
         --bg: #0f1514;
         --surface: #161e1d;
         --border: #263231;
@@ -33,7 +35,7 @@
     }
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 64px; }
 body {
     margin: 0;
     background: var(--bg);
@@ -47,49 +49,152 @@ code {
     background: var(--code-bg);
     padding: 0.1em 0.35em;
     border-radius: 4px;
+    overflow-wrap: anywhere;
 }
+pre {
+    background: var(--code-bg);
+    border-radius: 10px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+pre code { background: none; padding: 0; font-size: 0.875rem; overflow-wrap: normal; }
 .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
 
-header { padding: 72px 0 56px; text-align: center; }
+.contact {
+    background: var(--accent-soft);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.925rem;
+}
+.contact .wrap { display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: center; align-items: center; padding-top: 10px; padding-bottom: 10px; }
+.handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 2px 12px;
+    font: inherit;
+    cursor: pointer;
+}
+.handle:hover { border-color: var(--accent); }
+.handle .label { color: var(--muted); }
+.handle strong { font-weight: 600; }
+
+header { padding: 56px 0 40px; text-align: center; }
 header img { width: 96px; height: 96px; }
 h1 { font-size: 2.75rem; margin: 16px 0 4px; letter-spacing: -0.02em; }
-.tagline { font-size: 1.2rem; color: var(--muted); margin: 0 auto 32px; max-width: 520px; }
+.tagline { font-size: 1.2rem; color: var(--muted); margin: 0 auto 28px; max-width: 540px; }
+.cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.button {
+    display: inline-block;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    border: 1px solid var(--accent);
+}
+.button.primary { background: var(--accent); color: #fff; }
+.button.primary:hover { background: var(--accent-strong); text-decoration: none; }
+.button.secondary { color: var(--accent); }
+.button.secondary:hover { background: var(--accent-soft); text-decoration: none; }
 
-.install {
-    display: flex;
-    max-width: 520px;
-    margin: 0 auto;
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+nav .wrap { display: flex; gap: 22px; overflow-x: auto; padding-top: 12px; padding-bottom: 12px; white-space: nowrap; }
+nav a { color: var(--muted); font-weight: 500; }
+nav a:hover { color: var(--accent); text-decoration: none; }
+
+section { padding: 44px 0; border-top: 1px solid var(--border); }
+section:first-child { border-top: 0; }
+h2 { font-size: 1.5rem; margin: 0 0 8px; }
+.intro { color: var(--muted); margin: 0 0 20px; }
+h3 { font-size: 1.05rem; margin: 0 0 6px; }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.tab {
+    font: inherit;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 8px 18px;
+    cursor: pointer;
+}
+.tab[aria-selected="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.panel {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 12px;
+    padding: 22px;
+}
+.panel[hidden] { display: none; }
+.panel p { margin: 0 0 12px; }
+.panel p:last-child { margin-bottom: 0; }
+.panel ol + p { margin-top: 14px; }
+
+.url {
+    display: flex;
+    background: var(--code-bg);
+    border-radius: 8px;
     overflow: hidden;
+    margin: 12px 0;
 }
-.install code {
-    flex: 1;
-    padding: 14px 16px;
-    background: none;
-    font-size: 0.95rem;
-    text-align: left;
-    overflow-x: auto;
-    white-space: nowrap;
-}
-.install button {
+.url code { flex: 1; padding: 12px 14px; background: none; white-space: nowrap; overflow-x: auto; }
+.url button {
     border: 0;
     background: var(--accent);
     color: #fff;
     font: inherit;
     font-weight: 600;
-    padding: 0 20px;
+    padding: 0 18px;
     cursor: pointer;
 }
-.install button:hover { background: var(--accent-strong); }
-.links { margin-top: 20px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-
-section { padding: 40px 0; border-top: 1px solid var(--border); }
-h2 { font-size: 1.5rem; margin: 0 0 20px; }
+.url button:hover { background: var(--accent-strong); }
 
 ol.steps { padding-left: 1.3em; margin: 0; }
 ol.steps li { margin-bottom: 10px; }
+ol.steps li:last-child { margin-bottom: 0; }
+
+details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+details > summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after { content: "+"; color: var(--muted); font-weight: 400; font-size: 1.2rem; line-height: 1; }
+details[open] > summary::after { content: "\2212"; }
+details > div { padding: 0 18px 16px; }
+details > div > p { margin: 0 0 10px; }
+details > div > :last-child { margin-bottom: 0; }
+.tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0 8px;
+    margin-left: 6px;
+    white-space: nowrap;
+}
 
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
 .card {
@@ -98,11 +203,18 @@ ol.steps li { margin-bottom: 10px; }
     border-radius: 10px;
     padding: 18px;
 }
-.card h3 { margin: 0 0 6px; font-size: 1rem; }
 .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
 
 ul.plain { margin: 0; padding-left: 1.2em; }
-ul.plain li { margin-bottom: 6px; }
+ul.plain li { margin-bottom: 8px; }
+.report {
+    margin-top: 20px;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 16px 18px;
+}
+.report p { margin: 0 0 8px; }
+.report ul { margin: 0; padding-left: 1.2em; }
 
 .about { display: flex; gap: 20px; align-items: flex-start; }
 .about img { width: 64px; height: 64px; border-radius: 50%; flex: none; }
@@ -111,49 +223,157 @@ ul.plain li { margin-bottom: 6px; }
 footer { padding: 32px 0 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.875rem; text-align: center; }
 footer p { margin: 4px 0; }
 
-@media (max-width: 520px) {
-    header { padding: 48px 0 40px; }
+@media (max-width: 560px) {
+    header { padding: 40px 0 32px; }
     h1 { font-size: 2.25rem; }
-    .install code { font-size: 0.85rem; white-space: normal; word-break: break-all; }
+    .panel { padding: 16px; }
+    .url code { white-space: normal; word-break: break-all; font-size: 0.85rem; }
     .about { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 
+<div class="contact">
+    <div class="wrap">
+        <span>Questions or bugs? Add me:</span>
+        <button type="button" class="handle" data-copy="rustbuilderz" title="Copy Discord username">
+            <span class="label">Discord</span> <strong>rustbuilderz</strong>
+        </button>
+        <button type="button" class="handle" data-copy="@oxicodona:rustbuilderz.xyz" title="Copy Matrix ID">
+            <span class="label">Matrix</span> <strong>@oxicodona:rustbuilderz.xyz</strong>
+        </button>
+    </div>
+</div>
+
 <header class="wrap">
     <img src="logo.svg" alt="">
     <h1>Mxcord</h1>
-    <p class="tagline">Your Matrix direct messages, inside Discord for Android.</p>
-    <div class="install">
-        <code id="plugin-url">https://oxicodona612.github.io/Mxcord/</code>
-        <button type="button" id="copy">Copy</button>
-    </div>
-    <div class="links">
-        <a href="https://github.com/oxicodona612/Mxcord">Source on GitHub</a>
-        <a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/pantalaimon.md">Encryption setup</a>
-        <a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/faq.md">FAQ</a>
-        <a href="https://github.com/oxicodona612/Mxcord/issues">Report an issue</a>
+    <p class="tagline">Your Matrix direct messages, inside Discord on Android and desktop.</p>
+    <div class="cta">
+        <a class="button primary" href="#install" data-platform="android">Get it for Android</a>
+        <a class="button secondary" href="#install" data-platform="desktop">Get it for desktop</a>
     </div>
 </header>
 
+<nav aria-label="Sections">
+    <div class="wrap">
+        <a href="#install">Install</a>
+        <a href="#setup">Setup guides</a>
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+        <a href="#issues">Known issues</a>
+        <a href="#about">About</a>
+        <a href="https://github.com/oxicodona612/Mxcord">GitHub</a>
+    </div>
+</nav>
+
 <main class="wrap">
-    <section>
+    <section id="install">
         <h2>Install</h2>
-        <ol class="steps">
-            <li>In Discord, open <strong>Settings &rsaquo; Revenge &rsaquo; Plugins</strong> and tap <strong>+</strong>.</li>
-            <li>Paste the plugin URL above and confirm the warning.</li>
-            <li>Open the Mxcord settings, enter your homeserver URL, username and password, and tap <strong>Log in</strong>. For encrypted chats, use your <a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/pantalaimon.md">pantalaimon</a> address instead of the homeserver's.</li>
-        </ol>
-        <p>Your Matrix DMs show up in the DM list right away. Revenge checks for updates each time Discord starts.</p>
+        <p class="intro">Mxcord is a Revenge plugin on Android and a Vencord plugin on desktop. Both work the same way and can be used at the same time.</p>
+
+        <div class="tabs" role="tablist">
+            <button type="button" class="tab" role="tab" id="tab-android" aria-controls="panel-android" aria-selected="true">Android</button>
+            <button type="button" class="tab" role="tab" id="tab-desktop" aria-controls="panel-desktop" aria-selected="false">Desktop</button>
+        </div>
+
+        <div class="panel" id="panel-android" role="tabpanel" aria-labelledby="tab-android">
+            <p>You need Discord for Android with <a href="https://github.com/revenge-mod">Revenge</a> or another Vendetta-compatible mod.</p>
+            <ol class="steps">
+                <li>In Discord, open <strong>Settings &rsaquo; Revenge &rsaquo; Plugins</strong> and tap <strong>+</strong>.</li>
+                <li>Paste this URL and confirm the warning:
+                    <div class="url">
+                        <code id="plugin-url">https://oxicodona612.github.io/Mxcord/</code>
+                        <button type="button" data-copy-target="plugin-url">Copy</button>
+                    </div>
+                </li>
+                <li>Open the Mxcord settings and <a href="#guide-login">log in</a>.</li>
+            </ol>
+            <p>Revenge checks for updates each time Discord starts, so new versions arrive on their own.</p>
+        </div>
+
+        <div class="panel" id="panel-desktop" role="tabpanel" aria-labelledby="tab-desktop" hidden>
+            <p>Vencord only loads third-party plugins in builds made from source, so Mxcord is built together with Vencord. You need <a href="https://git-scm.com">Git</a>, <a href="https://nodejs.org">Node.js</a> 18 or later and <a href="https://pnpm.io">pnpm</a>. Run these in a terminal:</p>
+<pre><code>git clone https://github.com/Vendicated/Vencord
+git clone https://github.com/oxicodona612/Mxcord
+node Mxcord/tools/install-vencord.mjs Vencord
+cd Vencord
+pnpm install --frozen-lockfile
+pnpm build
+pnpm inject</code></pre>
+            <ol class="steps">
+                <li><code>pnpm inject</code> asks which Discord to patch. Pick the one you use (Stable, PTB or Canary).</li>
+                <li>Restart Discord and enable <strong>Mxcord</strong> under <strong>Settings &rsaquo; Vencord &rsaquo; Plugins</strong>.</li>
+                <li>Restart Discord once more so the Matrix badges appear, then open the plugin's settings and <a href="#guide-login">log in</a>.</li>
+            </ol>
+        </div>
     </section>
 
-    <section>
+    <section id="setup">
+        <h2>Setup guides</h2>
+        <p class="intro">Step-by-step help for logging in, encryption and everyday use.</p>
+
+        <details id="guide-login" open>
+            <summary>Logging in</summary>
+            <div>
+                <ol class="steps">
+                    <li>Open the Mxcord settings: on Android under <strong>Settings &rsaquo; Revenge &rsaquo; Plugins</strong>, on desktop under <strong>Settings &rsaquo; Vencord &rsaquo; Plugins</strong> (the cog next to Mxcord).</li>
+                    <li>Enter the <strong>homeserver URL</strong>. For encrypted chats this must be your <a href="#guide-encryption">pantalaimon address</a>, for example <code>https://pan.example.com</code>. Without encryption, use your homeserver's address.</li>
+                    <li>Enter your <strong>username</strong>, either the full Matrix ID (<code>@you:example.com</code>) or just the name (<code>you</code>), and your password.</li>
+                    <li>Tap <strong>Log in</strong>. Your Matrix DMs appear in the DM list within a few seconds.</li>
+                </ol>
+                <p>Your password is only sent to your homeserver to log in. Mxcord keeps the access token on your device.</p>
+            </div>
+        </details>
+
+        <details id="guide-encryption">
+            <summary>Encrypted chats with pantalaimon</summary>
+            <div>
+                <p>Mxcord doesn't encrypt or decrypt anything itself. <a href="https://github.com/matrix-org/pantalaimon">pantalaimon</a> is a small proxy that runs next to your homeserver and does the encryption for clients that connect through it.</p>
+                <ol class="steps">
+                    <li>Install pantalaimon on the server or another always-on machine, following the <a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/pantalaimon.md">pantalaimon guide</a>. It listens on port 8009 by default.</li>
+                    <li>Give it its own address. With a Cloudflare Tunnel, add a public hostname such as <code>pan.example.com</code> pointing at <code>http://localhost:8009</code>. With Caddy or nginx, proxy a subdomain to port 8009. A LAN address like <code>http://192.168.1.2:8009</code> works too, but only at home.</li>
+                    <li>Log in to Mxcord with that address. Keep your homeserver's own address for Element and other apps; only Mxcord should go through pantalaimon.</li>
+                    <li>Optionally, <a href="#guide-verify">verify the pantalaimon device</a> so Element stops warning about it.</li>
+                </ol>
+            </div>
+        </details>
+
+        <details id="guide-verify">
+            <summary>Verifying the pantalaimon device</summary>
+            <div>
+                <p>pantalaimon can't do cross-signing, so Element shows its device as unverified and marks messages you send from Discord with a warning. The verification script signs the device with your cross-signing key instead.</p>
+<pre><code>node Mxcord/tools/verify-device.mjs https://example.com</code></pre>
+                <p>It asks for your password and your <strong>recovery key</strong> (48 characters starting with <code>Es</code>) or security phrase, the ones Element gave you when you set up recovery. Pick the <code>pantalaimon</code> device from the list. Lost the key? Element can make a new one under <strong>Settings &rsaquo; Encryption &rsaquo; Recovery</strong>.</p>
+                <p>The <code>Discord (Mxcord)</code> session has no encryption keys of its own and always shows as unverified. That's expected.</p>
+            </div>
+        </details>
+
+        <details id="guide-chats">
+            <summary>Starting chats and message requests</summary>
+            <div>
+                <p><strong>Add by Matrix</strong> starts a new DM. On Android it replaces "Find Your Friends" on the Add Friends screen; on desktop it is in the Vencord toolbox; on both it is in the Mxcord settings. Type a full Matrix ID, or just a name for someone on your own server.</p>
+                <p>When someone invites you on Matrix, the chat appears under <strong>Message Requests</strong>. Accept it to join and read their messages, or ignore it to decline.</p>
+            </div>
+        </details>
+
+        <details id="guide-update">
+            <summary>Updating</summary>
+            <div>
+                <p><strong>Android:</strong> nothing to do. Revenge downloads new versions when Discord starts.</p>
+                <p><strong>Desktop:</strong> run <code>git pull</code> in both the <code>Mxcord</code> and <code>Vencord</code> folders, then run the install script and <code>pnpm build</code> again and restart Discord. If a Discord update removed Vencord, run <code>pnpm inject</code> again.</p>
+            </div>
+        </details>
+    </section>
+
+    <section id="features">
         <h2>Features</h2>
+        <p class="intro">Matrix chats behave like any other Discord DM.</p>
         <div class="grid">
             <div class="card">
                 <h3>Native DMs</h3>
-                <p>Matrix conversations sit in the DM list next to your Discord chats, sorted by activity, with previews.</p>
+                <p>Matrix conversations sit in the DM list next to your Discord chats, sorted by activity, with a Matrix badge.</p>
             </div>
             <div class="card">
                 <h3>Full messaging</h3>
@@ -165,7 +385,7 @@ footer p { margin: 4px 0; }
             </div>
             <div class="card">
                 <h3>Profiles</h3>
-                <p>Avatars and display names come from Matrix and stay up to date.</p>
+                <p>Avatars and display names come from Matrix and stay up to date. Profiles show the Matrix ID.</p>
             </div>
             <div class="card">
                 <h3>Message requests</h3>
@@ -173,32 +393,88 @@ footer p { margin: 4px 0; }
             </div>
             <div class="card">
                 <h3>Notifications</h3>
-                <p>New messages notify like any other DM. Start new chats with <strong>Add by Matrix</strong>.</p>
+                <p>New messages notify like any other DM, on Android and desktop.</p>
+            </div>
+            <div class="card">
+                <h3>Private by design</h3>
+                <p>Mxcord only talks to your homeserver. Discord never sees your Matrix messages, and requests about Matrix chats are answered on your device.</p>
+            </div>
+            <div class="card">
+                <h3>No duplicates</h3>
+                <p>Rooms bridged from Discord by mautrix-discord are skipped, so your Discord DMs aren't shown twice.</p>
             </div>
         </div>
     </section>
 
-    <section>
-        <h2>Privacy</h2>
-        <p>Mxcord runs entirely on your phone and only talks to the homeserver you choose. Messages go over Matrix and never touch Discord's servers. Any Discord request that refers to a Matrix chat is answered on the device instead of being sent.</p>
+    <section id="faq">
+        <h2>FAQ</h2>
+        <p class="intro">Common errors and how to fix them. The <a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/faq.md">full FAQ</a> has more.</p>
+
+        <details>
+            <summary>"User ID is malformed"</summary>
+            <div><p>The username was half a Matrix ID, like <code>you:example.com</code> without the <code>@</code>, or <code>@you</code> without the server. Enter <code>@you:example.com</code> or just <code>you</code>. Current versions fix this automatically.</p></div>
+        </details>
+        <details>
+            <summary>"Network request failed" or "fetch failed"</summary>
+            <div><p>Discord couldn't reach the URL. Check that <code>&lt;url&gt;/_matrix/client/versions</code> opens in a browser on the same device. On Android, use <code>https://</code>, since stock Discord blocks plain <code>http://</code>. LAN addresses only work on the same network.</p></div>
+        </details>
+        <details>
+            <summary>Messages say "Unable to decrypt message", or my replies aren't encrypted</summary>
+            <div><p>Mxcord is connected to the homeserver directly instead of through pantalaimon. Log out, change the URL to your <a href="#guide-encryption">pantalaimon address</a> and log in again. If only old messages fail, they were sent before pantalaimon existed; import your keys as described in the <a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/pantalaimon.md#older-messages">pantalaimon guide</a>.</p></div>
+        </details>
+        <details>
+            <summary>Element warns "sent by a device unverified by the owner"</summary>
+            <div><p>Messages from Discord are encrypted by pantalaimon's device, which isn't cross-signed yet. <a href="#guide-verify">Verify it</a> and the warning disappears from new and old messages.</p></div>
+        </details>
+        <details>
+            <summary>"Session expired. Log in again."</summary>
+            <div><p>The session was signed out, usually from Element's session list. Log in again from the Mxcord settings.</p></div>
+        </details>
+        <details>
+            <summary>A Matrix chat doesn't show up</summary>
+            <div><p>Only one-to-one DMs are shown; group rooms and spaces aren't. Chats with mautrix-discord puppets (<code>@discord_…</code>) are skipped on purpose.</p></div>
+        </details>
+        <details>
+            <summary>Mxcord isn't in Vencord's plugin list</summary>
+            <div><p>The official Vencord installer can't load third-party plugins. Use the <a href="#install" data-platform="desktop">desktop install</a> steps, and make sure <code>pnpm inject</code> patched the Discord you actually open.</p></div>
+        </details>
+        <details>
+            <summary>A new version doesn't show up</summary>
+            <div><p>On Android, fully close Discord and open it again. On desktop, follow the <a href="#guide-update">update steps</a>.</p></div>
+        </details>
     </section>
 
-    <section>
-        <h2>Requirements</h2>
+    <section id="issues">
+        <h2>Known issues</h2>
+        <p class="intro">Things that don't work yet, or work a little differently than in Element.</p>
         <ul class="plain">
-            <li>Discord for Android with Revenge or another Vendetta-compatible mod.</li>
-            <li>A Matrix account on a homeserver reachable over HTTPS.</li>
-            <li><a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/pantalaimon.md">pantalaimon</a> for encrypted rooms.</li>
+            <li>Only one-to-one DMs are supported. Group rooms, spaces, calls, reactions and threads aren't.</li>
+            <li>Images and files show as a text line with their name instead of a preview.</li>
+            <li>Notifications only arrive while Discord is running, in the foreground or background.</li>
+            <li>Matrix DMs can vanish for a few seconds when Discord reconnects. They come back on their own.</li>
+            <li>When you accept an invite from another server, the earlier messages can take up to a minute to appear.</li>
+            <li>Profiles of Matrix users show a "Member since" date of December 2014. It is a placeholder, not their real join date.</li>
+            <li>On Android, "Add by Matrix" relies on Discord's English "Find Your Friends" label. In other languages, use the button in the Mxcord settings.</li>
+            <li>On desktop, Discord updates can remove Vencord. Run <code>pnpm inject</code> again.</li>
+            <li>Client modifications are against Discord's Terms of Service. Use them at your own risk.</li>
         </ul>
+        <div class="report">
+            <p><strong>Found a bug?</strong> <a href="https://github.com/oxicodona612/Mxcord/issues">Open an issue on GitHub</a> or message me on Discord or Matrix (links at the top). It helps to include:</p>
+            <ul>
+                <li>Android or desktop, and your Discord version</li>
+                <li>Your homeserver software (Synapse, Conduit, continuwuity…) and whether you use pantalaimon</li>
+                <li>The exact error text, and what you did right before it happened</li>
+            </ul>
+        </div>
     </section>
 
-    <section>
+    <section id="about">
         <h2>About</h2>
         <div class="about">
             <img src="https://github.com/oxicodona612.png?size=128" alt="">
             <div>
                 <p>Mxcord is made by <a href="https://github.com/oxicodona612">oxicodona612</a>. It started as a way to keep Matrix and Discord conversations in one app without running a bridge.</p>
-                <p>It is free and open source under the Apache License 2.0. Contributions, bug reports and feature ideas are welcome on GitHub.</p>
+                <p>It is free and open source under the Apache License 2.0. Contributions, bug reports and feature ideas are welcome on GitHub, or say hi on Discord (<strong>rustbuilderz</strong>) or Matrix (<strong>@oxicodona:rustbuilderz.xyz</strong>).</p>
             </div>
         </div>
     </section>
@@ -206,21 +482,44 @@ footer p { margin: 4px 0; }
 
 <footer class="wrap">
     <p>Mxcord &middot; Apache License 2.0 &middot; <a href="https://github.com/oxicodona612/Mxcord">GitHub</a></p>
-    <p>Not affiliated with Discord or the Matrix.org Foundation. Client modifications are against Discord's Terms of Service.</p>
+    <p>Not affiliated with Discord or the Matrix.org Foundation.</p>
 </footer>
 
 <script>
-document.getElementById("copy").addEventListener("click", async e => {
-    const button = e.currentTarget;
+async function copy(text, button, done) {
+    const original = button.innerHTML;
     try {
-        await navigator.clipboard.writeText(document.getElementById("plugin-url").textContent);
-        button.textContent = "Copied";
+        await navigator.clipboard.writeText(text);
+        button.textContent = done;
     } catch {
-        getSelection().selectAllChildren(document.getElementById("plugin-url"));
-        button.textContent = "Selected";
+        button.textContent = text;
     }
-    setTimeout(() => (button.textContent = "Copy"), 1500);
-});
+    setTimeout(() => (button.innerHTML = original), 1500);
+}
+
+for (const button of document.querySelectorAll("[data-copy]")) {
+    button.addEventListener("click", () => copy(button.dataset.copy, button, "Copied"));
+}
+for (const button of document.querySelectorAll("[data-copy-target]")) {
+    button.addEventListener("click", () => copy(document.getElementById(button.dataset.copyTarget).textContent, button, "Copied"));
+}
+
+const tabs = { android: document.getElementById("tab-android"), desktop: document.getElementById("tab-desktop") };
+function showPlatform(platform) {
+    for (const [name, tab] of Object.entries(tabs)) {
+        const active = name === platform;
+        tab.setAttribute("aria-selected", String(active));
+        document.getElementById(tab.getAttribute("aria-controls")).hidden = !active;
+    }
+}
+for (const [name, tab] of Object.entries(tabs)) tab.addEventListener("click", () => showPlatform(name));
+for (const link of document.querySelectorAll("[data-platform]")) {
+    link.addEventListener("click", () => showPlatform(link.dataset.platform));
+}
+// Open the matching tab for desktop visitors and #desktop links.
+if (location.hash === "#desktop" || (location.hash !== "#android" && !/Android|iPhone|iPad/i.test(navigator.userAgent))) {
+    showPlatform("desktop");
+}
 </script>
 </body>
 </html>
