@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mxcord</title>
+<meta name="description" content="Matrix direct messages inside Discord for Android. A Revenge plugin with end-to-end encryption, avatars, message requests and notifications.">
+<meta property="og:title" content="Mxcord">
+<meta property="og:description" content="Matrix direct messages inside Discord for Android.">
+<meta name="theme-color" content="#12A39A">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<style>
+:root {
+    --accent: #12a39a;
+    --accent-strong: #0e8a82;
+    --bg: #f6f8f8;
+    --surface: #ffffff;
+    --border: #dfe5e5;
+    --text: #15201f;
+    --muted: #5b6b6a;
+    --code-bg: #eef3f3;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accent: #2cc2b8;
+        --accent-strong: #5fd6ce;
+        --bg: #0f1514;
+        --surface: #161e1d;
+        --border: #263231;
+        --text: #e6eeed;
+        --muted: #93a3a2;
+        --code-bg: #1d2827;
+    }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+    font: 0.9em ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+header { padding: 72px 0 56px; text-align: center; }
+header img { width: 96px; height: 96px; }
+h1 { font-size: 2.75rem; margin: 16px 0 4px; letter-spacing: -0.02em; }
+.tagline { font-size: 1.2rem; color: var(--muted); margin: 0 auto 32px; max-width: 520px; }
+
+.install {
+    display: flex;
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.install code {
+    flex: 1;
+    padding: 14px 16px;
+    background: none;
+    font-size: 0.95rem;
+    text-align: left;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.install button {
+    border: 0;
+    background: var(--accent);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    padding: 0 20px;
+    cursor: pointer;
+}
+.install button:hover { background: var(--accent-strong); }
+.links { margin-top: 20px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+section { padding: 40px 0; border-top: 1px solid var(--border); }
+h2 { font-size: 1.5rem; margin: 0 0 20px; }
+
+ol.steps { padding-left: 1.3em; margin: 0; }
+ol.steps li { margin-bottom: 10px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+}
+.card h3 { margin: 0 0 6px; font-size: 1rem; }
+.card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+ul.plain { margin: 0; padding-left: 1.2em; }
+ul.plain li { margin-bottom: 6px; }
+
+.about { display: flex; gap: 20px; align-items: flex-start; }
+.about img { width: 64px; height: 64px; border-radius: 50%; flex: none; }
+.about p { margin: 0 0 10px; }
+
+footer { padding: 32px 0 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.875rem; text-align: center; }
+footer p { margin: 4px 0; }
+
+@media (max-width: 520px) {
+    header { padding: 48px 0 40px; }
+    h1 { font-size: 2.25rem; }
+    .install code { font-size: 0.85rem; white-space: normal; word-break: break-all; }
+    .about { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+    <img src="logo.svg" alt="">
+    <h1>Mxcord</h1>
+    <p class="tagline">Your Matrix direct messages, inside Discord for Android.</p>
+    <div class="install">
+        <code id="plugin-url">https://oxicodona612.github.io/Mxcord/</code>
+        <button type="button" id="copy">Copy</button>
+    </div>
+    <div class="links">
+        <a href="https://github.com/oxicodona612/Mxcord">Source on GitHub</a>
+        <a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/pantalaimon.md">Encryption setup</a>
+        <a href="https://github.com/oxicodona612/Mxcord/issues">Report an issue</a>
+    </div>
+</header>
+
+<main class="wrap">
+    <section>
+        <h2>Install</h2>
+        <ol class="steps">
+            <li>In Discord, open <strong>Settings &rsaquo; Revenge &rsaquo; Plugins</strong> and tap <strong>+</strong>.</li>
+            <li>Paste the plugin URL above and confirm the warning.</li>
+            <li>Open the Mxcord settings, enter your homeserver, username and password, and tap <strong>Log in</strong>.</li>
+        </ol>
+        <p>Your Matrix DMs show up in the DM list right away. Revenge checks for updates each time Discord starts.</p>
+    </section>
+
+    <section>
+        <h2>Features</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Native DMs</h3>
+                <p>Matrix conversations sit in the DM list next to your Discord chats, sorted by activity, with previews.</p>
+            </div>
+            <div class="card">
+                <h3>Full messaging</h3>
+                <p>Send, reply, edit and delete. Older history loads as you scroll.</p>
+            </div>
+            <div class="card">
+                <h3>End-to-end encryption</h3>
+                <p>Encrypted rooms work through pantalaimon running next to your homeserver.</p>
+            </div>
+            <div class="card">
+                <h3>Profiles</h3>
+                <p>Avatars and display names come from Matrix and stay up to date.</p>
+            </div>
+            <div class="card">
+                <h3>Message requests</h3>
+                <p>DM invites appear under Message Requests and can be accepted or ignored.</p>
+            </div>
+            <div class="card">
+                <h3>Notifications</h3>
+                <p>New messages notify like any other DM. Start new chats with <strong>Add by Matrix</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Privacy</h2>
+        <p>Mxcord runs entirely on your phone and only talks to the homeserver you choose. Messages go over Matrix and never touch Discord's servers. Any Discord request that refers to a Matrix chat is answered on the device instead of being sent.</p>
+    </section>
+
+    <section>
+        <h2>Requirements</h2>
+        <ul class="plain">
+            <li>Discord for Android with Revenge or another Vendetta-compatible mod.</li>
+            <li>A Matrix account on a homeserver reachable over HTTPS.</li>
+            <li><a href="https://github.com/oxicodona612/Mxcord/blob/main/docs/pantalaimon.md">pantalaimon</a> for encrypted rooms.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>About</h2>
+        <div class="about">
+            <img src="https://github.com/oxicodona612.png?size=128" alt="">
+            <div>
+                <p>Mxcord is made by <a href="https://github.com/oxicodona612">oxicodona612</a>. It started as a way to keep Matrix and Discord conversations in one app without running a bridge.</p>
+                <p>It is free and open source under the Apache License 2.0. Contributions, bug reports and feature ideas are welcome on GitHub.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="wrap">
+    <p>Mxcord &middot; Apache License 2.0 &middot; <a href="https://github.com/oxicodona612/Mxcord">GitHub</a></p>
+    <p>Not affiliated with Discord or the Matrix.org Foundation. Client modifications are against Discord's Terms of Service.</p>
+</footer>
+
+<script>
+document.getElementById("copy").addEventListener("click", async e => {
+    const button = e.currentTarget;
+    try {
+        await navigator.clipboard.writeText(document.getElementById("plugin-url").textContent);
+        button.textContent = "Copied";
+    } catch {
+        getSelection().selectAllChildren(document.getElementById("plugin-url"));
+        button.textContent = "Selected";
+    }
+    setTimeout(() => (button.textContent = "Copy"), 1500);
+});
+</script>
+</body>
+</html>

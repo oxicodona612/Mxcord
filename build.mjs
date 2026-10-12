@@ -1,5 +1,5 @@
-// Builds the files served at the plugin URL: dist/index.js and dist/manifest.json.
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+// Builds the files served at the plugin URL: the plugin (index.js, manifest.json) and the homepage.
+import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 
 const root = new URL("./", import.meta.url);
@@ -22,4 +22,6 @@ const manifest = {
 await mkdir(new URL("dist/", root), { recursive: true });
 await writeFile(new URL("dist/index.js", root), js);
 await writeFile(new URL("dist/manifest.json", root), JSON.stringify(manifest, null, 2));
+await copyFile(new URL("site/index.html", root), new URL("dist/index.html", root));
+await copyFile(new URL("assets/mxcord-logo.svg", root), new URL("dist/logo.svg", root));
 console.log(`${manifest.name}: ${manifest.hash.slice(0, 12)} (${js.length} bytes)`);

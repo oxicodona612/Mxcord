@@ -61,7 +61,7 @@ Mxcord syncs with your homeserver using the Matrix Client-Server API. Each DM ro
 node build.mjs
 ```
 
-This writes `dist/index.js` and `dist/manifest.json`. After editing `assets/mxcord-logo.svg`, run `npm install` and `npm run logo` to update the embedded icon.
+This writes `dist/index.js`, `dist/manifest.json` and the homepage from `site/index.html`. After editing `assets/mxcord-logo.svg`, run `npm install` and `npm run logo` to update the embedded icon.
 
 Pushes to `main` are published to GitHub Pages by `.github/workflows/pages.yml`.
 
