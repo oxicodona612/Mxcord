@@ -16,7 +16,7 @@ Mxcord is a [Revenge](https://github.com/revenge-mod) plugin for Discord on Andr
    ```
 
    Revenge shows a warning for plugins installed from a URL. Confirm to continue.
-3. Open the Mxcord settings, enter your homeserver URL, username and password, and tap **Log in**.
+3. Open the Mxcord settings, enter your homeserver URL, username and password, and tap **Log in**. For encrypted chats, use your [pantalaimon](docs/pantalaimon.md) address instead of the homeserver's.
 
 Revenge checks the URL for updates each time Discord starts.
 
