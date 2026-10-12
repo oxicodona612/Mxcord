@@ -113,7 +113,13 @@
 
     async function login(username, password) {
         if (!/^https?:\/\/.+/.test(store.homeserver)) throw new Error("Enter your homeserver URL first");
-        const user = username.trim();
+        // Servers reject half-qualified IDs like "@you" or "you:server" as malformed.
+        let user = username.trim();
+        if (user.includes(":")) {
+            if (!user.startsWith("@")) user = `@${user}`;
+        } else {
+            user = user.replace(/^@/, "");
+        }
         const res = await api("POST", "/login", {
             auth: false,
             body: {
