@@ -71,3 +71,17 @@ Synapse does not need these changes.
 ## Older messages
 
 pantalaimon can only decrypt messages sent after its session was created. To read older messages, export your room keys from Element (**Settings > Security & Privacy > Export E2E room keys**) and import them with `panctl import-keys`.
+
+## Verifying the pantalaimon device
+
+pantalaimon logs in with its own device, named `pantalaimon`, which holds the encryption keys. Its encryption library does not support cross-signing, so Element lists it as unverified and the device can't be verified from Element. Clients that only share keys with verified devices will not send it any.
+
+`tools/verify-device.mjs` signs the device with your cross-signing key instead. It needs Node.js 18 or later, your account password and your recovery key or security phrase, and must be run after cross-signing and recovery are set up in Element.
+
+```sh
+node tools/verify-device.mjs https://matrix.example.com
+```
+
+The script logs in with a temporary session, unlocks the self-signing key from secret storage, lists your unverified devices and signs the ones you choose. The temporary session is signed out afterwards and nothing is saved. Run it again if pantalaimon is reinstalled or you reset cross-signing in Element, since both replace the keys involved.
+
+The `Discord (Mxcord)` session has no encryption keys of its own and stays unverified. That is expected: pantalaimon handles encryption for it.

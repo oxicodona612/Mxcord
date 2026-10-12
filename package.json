@@ -7,7 +7,8 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "logo": "node tools/gen-logo.mjs"
+    "logo": "node tools/gen-logo.mjs",
+    "verify": "node tools/verify-device.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2"

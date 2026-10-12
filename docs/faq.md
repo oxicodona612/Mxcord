@@ -53,7 +53,13 @@ pantalaimon can only decrypt messages sent after its session was created. Export
 
 ### The device shows as "Unverified" in Element
 
-This is expected. pantalaimon's encryption library does not support cross-signing, which is what Element uses to mark your own devices as verified. Messages still work, unless Element is set to withhold keys from unverified devices. In Element, open **Settings > Security & Privacy** and make sure "Never send encrypted messages to unverified sessions" and "Exclude insecure devices" are turned off.
+pantalaimon's device can't be verified from Element, because its encryption library does not support cross-signing. Sign it with your cross-signing key using the script in [Verifying the pantalaimon device](pantalaimon.md#verifying-the-pantalaimon-device):
+
+```
+node tools/verify-device.mjs https://example.com
+```
+
+The `Discord (Mxcord)` session has no encryption keys and always shows as unverified. That is expected; pantalaimon does the encryption for it.
 
 ### pantalaimon logs errors with Conduit, conduwuit or continuwuity
 
